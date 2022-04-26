@@ -9,7 +9,7 @@ df = pd.DataFrame(columns = ["NameR", "NameEng", "Year", "Genre", "Grade", "Revi
 
 
 for genre in genres:
-  req =requests.get('https://www.kinopoisk.ru/reviews/type/comment/sort/date/period/month/feature/all/genre/'+ str(genre) + '/') # получаем содержимое стр'
+  req =requests.get('https://www.kinopoisk.ru/reviews/type/comment/genre/'+ str(genre) + '/period/month/perpage/50/#list') # получаем содержимое стр'
   html = BS(req.content, 'html.parser') 
 # создаём объект BS, который нужен для приёма данных через req.content, сообщаем, что это html документ
   reviewItems = html.find_all(class_= "reviewItem userReview")
@@ -19,12 +19,13 @@ for genre in genres:
     year = name_full[-5:-1] # год
     nameR = item.find(class_="film").find("span").text.strip() # назв на русском
     review = item.find(class_="brand_words").find("p").text.strip() # отзыв
-    grade = "-" #оценка
+    grade = None #оценка
     if item.find(class_='response good') != None:
-      grade = "response good"
+      grade = 1
     if item.find(class_='response bad') != None:
-      grade = "response bad"
-    new_row = {"NameR" : nameR,"NameEng" : nameEng, "Year" : year, "Genre" : genre, "Grade" :grade, "Review" : review}
+      grade = -1
+
+    new_row = {"NameR" : nameR,"NameEng" : nameEng, "Year" : year, "Genre" : str(genre), "Grade" :grade, "Review" : review}
     df.loc[len(df.index)] = new_row #добавляем строку
 
     

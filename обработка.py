@@ -1,93 +1,105 @@
-import nltk
 import re
 import os
-import io
-from nltk.corpus import stopwords
+import nltk
+from nltk.corpus import stopwords #стоп слова
 from nltk.stem.snowball import SnowballStemmer
+nltk.download('words') #для проверки правописания
+from nltk.corpus import words
 
-from spellchecker import SpellChecker
-
-spell = SpellChecker() # проверка правописания
-
+spell = set(words.words())
 sn_stemmer = SnowballStemmer("english")
 
 stop_words = set(stopwords.words('english'))
-stop_words.add("br") #перенос стр
+stop_words.add("br")  # перенос стр
 
-
-appendFile = open('filterAll.txt', 'w')
+appendFile = open('filterTrain.txt', 'w')
 
 f = 0
-for file in os.scandir(r"C:\Users\asmis\OneDrive\Рабочий стол\Настя\aclImdb\train\neg"):
-  fil = io.open(file.path, encoding = 'utf-8')
-  words = fil.read().lower().split() # массив слов в нижнем регистре
+for file in os.scandir(r"C:\Users\asmis\OneDrive\Рабочий стол\train\neg"):
+    fil = open(file.path, encoding='utf-8')
+    words = fil.read().lower().split()  # массив слов в нижнем регистре
 
-  f += 1
-  print(f)
+    f += 1
+    print(f)
 
-  for r in words:
+    for r in words:
 
-    if r not in stop_words:      #сначала убираем стоп-слова, тк в некоторых есть '
+        if r not in stop_words:  # сначала убираем стоп-слова, тк в некоторых есть '
 
-      r = re.sub("[^A-Za-z]", "", r)  # удаляем числа и знаки препинания из слова
-      if r != '' and r not in stop_words and r in spell: #для удаленных чисел ставших пустым местом или слипшихся
-        appendFile.write(" " + sn_stemmer.stem(r)) #оставляем основу слова
+            r = re.sub("[^A-Za-z]", "", r)  # удаляем числа и знаки препинания из слова
+            if r != '' and r not in stop_words and r in spell:  # для удаленных чисел ставших пустым местом или слипшихся
+                appendFile.write(" " + sn_stemmer.stem(r))  # оставляем основу слова
 
-  appendFile.write("!!!") #разделитель отзывов
-  fil.close()
+    appendFile.write("!!!")  # разделитель отзывов
+    fil.close()
 
-for file in os.scandir(r"C:\Users\asmis\OneDrive\Рабочий стол\Настя\aclImdb\train\pos"):
-  fil = io.open(file.path, encoding = 'utf-8')
-  words = fil.read().lower().split() # массив слов в нижнем регистре
+for file in os.scandir(r"C:\Users\asmis\OneDrive\Рабочий стол\train\pos"):
+    fil = open(file.path, encoding='utf-8')
+    words = fil.read().lower().split()  # массив слов в нижнем регистре
 
-  f += 1
-  print(f)
+    f += 1
+    print(f)
 
-  for r in words:
+    for r in words:
 
-    if r not in stop_words:      #сначала убираем стоп-слова, тк в некоторых есть '
+        if r not in stop_words:  # сначала убираем стоп-слова, тк в некоторых есть '
 
-      r = re.sub("[^A-Za-z]", "", r)  # удаляем числа и знаки препинания из слова
-      if r != '' and r not in stop_words and r in spell: #для удаленных чисел ставших пустым местом или слипшихся
-        appendFile.write(" " + sn_stemmer.stem(r)) #оставляем основу слова
+            r = re.sub("[^A-Za-z]", "", r)  # удаляем числа и знаки препинания из слова
+            if r != '' and r not in stop_words and r in spell:  # для удаленных чисел ставших пустым местом или слипшихся
+                appendFile.write(" " + sn_stemmer.stem(r))  # оставляем основу слова
 
-  appendFile.write("!!!") #разделитель отзывов
-  fil.close()
+    appendFile.write("!!!")  # разделитель отзывов
+    fil.close()
 
-for file in os.scandir(r"C:\Users\asmis\OneDrive\Рабочий стол\Настя\aclImdb\test\neg"):
-  fil = io.open(file.path, encoding = 'utf-8')
-  words = fil.read().lower().split() # массив слов в нижнем регистре
 
-  f += 1
-  print(f)
+appendFile2 = open('filterTest.txt', 'w')
 
-  for r in words:
+for file in os.scandir(r"C:\Users\asmis\OneDrive\Рабочий стол\test\neg"):
+    fil = open(file.path, encoding='utf-8')
+    words = fil.read().lower().split()  # массив слов в нижнем регистре
 
-    if r not in stop_words:      #сначала убираем стоп-слова, тк в некоторых есть '
+    f += 1
+    print(f)
 
-      r = re.sub("[^A-Za-z]", "", r)  # удаляем числа и знаки препинания из слова
-      if r != '' and r not in stop_words and r in spell: #для удаленных чисел ставших пустым местом или слипшихся
-        appendFile.write(" " + sn_stemmer.stem(r)) #оставляем основу слова
+    for r in words:
 
-  appendFile.write("!!!") #разделитель отзывов
-  fil.close()
+        if r not in stop_words:  # сначала убираем стоп-слова, тк в некоторых есть '
 
-for file in os.scandir(r"C:\Users\asmis\OneDrive\Рабочий стол\Настя\aclImdb\test\pos"):
-  fil = io.open(file.path, encoding = 'utf-8')
-  words = fil.read().lower().split() # массив слов в нижнем регистре
+            r = re.sub("[^A-Za-z]", "", r)  # удаляем числа и знаки препинания из слова
+            if r != '' and r not in stop_words and r in spell:  # для удаленных чисел ставших пустым местом или слипшихся
+                if f >= 25000 and f < 30000:  # еще 5к отзывов из теста в трэйн добавляем
+                    appendFile.write(" " + sn_stemmer.stem(r))  # оставляем основу слова
+                else:
+                    appendFile2.write(" " + sn_stemmer.stem(r))  # оставляем основу слова
+    if f >= 25000 and f < 30000:
+        appendFile.write("!!!")  # разделитель отзывов
+    else:
+        appendFile2.write("!!!")  # разделитель отзывов
+    fil.close()
 
-  f += 1
-  print(f)
+for file in os.scandir(r"C:\Users\asmis\OneDrive\Рабочий стол\test\pos"):
+    fil = open(file.path, encoding='utf-8')
+    words = fil.read().lower().split()  # массив слов в нижнем регистре
 
-  for r in words:
+    f += 1
+    print(f)
 
-    if r not in stop_words:      #сначала убираем стоп-слова, тк в некоторых есть '
+    for r in words:
 
-      r = re.sub("[^A-Za-z]", "", r)  # удаляем числа и знаки препинания из слова
-      if r != '' and r not in stop_words and r in spell: #для удаленных чисел ставших пустым местом или слипшихся
-        appendFile.write(" " + sn_stemmer.stem(r)) #оставляем основу слова
-  if f != 50000:
-    appendFile.write("!!!") #разделитель отзывов
-  fil.close()
+        if r not in stop_words:  # сначала убираем стоп-слова, тк в некоторых есть '
+
+            r = re.sub("[^A-Za-z]", "", r)  # удаляем числа и знаки препинания из слова
+            if r != '' and r not in stop_words and r in spell:  # для удаленных чисел ставших пустым местом или слипшихся
+                if f > 45000 and f <= 50000:  # еще 5к отзывов из теста в трэйн добавляем
+                    appendFile.write(" " + sn_stemmer.stem(r))  # оставляем основу слова
+                else:
+                    appendFile2.write(" " + sn_stemmer.stem(r))  # оставляем основу слова
+    if f > 45000 and f < 50000:
+        appendFile.write("!!!")  # разделитель отзывов
+    elif f!=50000:
+        appendFile2.write("!!!")  # разделитель отзывов
+
+    fil.close()
 
 appendFile.close()
+appendFile2.close()

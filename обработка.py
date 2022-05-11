@@ -1,9 +1,10 @@
 import re
 import os
 import nltk
-from nltk.corpus import stopwords #стоп слова
+from nltk.corpus import stopwords  # стоп слова
 from nltk.stem.snowball import SnowballStemmer
-nltk.download('words') #для проверки правописания
+
+nltk.download('words')  # для проверки правописания
 from nltk.corpus import words
 
 spell = set(words.words())
@@ -51,7 +52,6 @@ for file in os.scandir(r"C:\Users\asmis\OneDrive\Рабочий стол\train\p
     appendFile.write("!!!")  # разделитель отзывов
     fil.close()
 
-
 appendFile2 = open('filterTest.txt', 'w')
 
 for file in os.scandir(r"C:\Users\asmis\OneDrive\Рабочий стол\test\neg"):
@@ -67,11 +67,11 @@ for file in os.scandir(r"C:\Users\asmis\OneDrive\Рабочий стол\test\ne
 
             r = re.sub("[^A-Za-z]", "", r)  # удаляем числа и знаки препинания из слова
             if r != '' and r not in stop_words and r in spell:  # для удаленных чисел ставших пустым местом или слипшихся
-                if f >= 25000 and f < 30000:  # еще 5к отзывов из теста в трэйн добавляем
+                if f > 25000 and f <= 30000:  # еще 5к отзывов из теста в трэйн добавляем
                     appendFile.write(" " + sn_stemmer.stem(r))  # оставляем основу слова
                 else:
                     appendFile2.write(" " + sn_stemmer.stem(r))  # оставляем основу слова
-    if f >= 25000 and f < 30000:
+    if f > 25000 and f <= 30000:
         appendFile.write("!!!")  # разделитель отзывов
     else:
         appendFile2.write("!!!")  # разделитель отзывов
@@ -96,10 +96,11 @@ for file in os.scandir(r"C:\Users\asmis\OneDrive\Рабочий стол\test\po
                     appendFile2.write(" " + sn_stemmer.stem(r))  # оставляем основу слова
     if f > 45000 and f < 50000:
         appendFile.write("!!!")  # разделитель отзывов
-    elif f!=50000:
+    elif f != 50000:
         appendFile2.write("!!!")  # разделитель отзывов
 
     fil.close()
 
 appendFile.close()
+
 appendFile2.close()
